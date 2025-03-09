@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mRNA Codon Matching</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+        }
+        .mRNA {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid black;
+            background: lightgray;
+            min-height: 50px;
+        }
+        .codon {
+            display: inline-block;
+            padding: 10px;
+            background: lightblue;
+            border: 1px solid black;
+            cursor: grab;
+            margin: 5px;
+        }
+        .dropzone {
+            width: 60px;
+            height: 30px;
+            border: 2px dashed black;
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>mRNA Codon Matching Simulation</h1>
+    <p>Drag and drop the correct codons onto the mRNA sequence.</p>
+    
+    <div class="container">
+        <h3>mRNA Strand</h3>
+        <div class="mRNA">
+            <div class="dropzone" data-codon="AUG"></div>
+            <div class="dropzone" data-codon="UUC"></div>
+            <div class="dropzone" data-codon="GGA"></div>
+            <div class="dropzone" data-codon="UAA"></div>
+        </div>
+        
+        <h3>Codons</h3>
+        <div id="codons">
+            <div class="codon" draggable="true" id="AUG">AUG</div>
+            <div class="codon" draggable="true" id="UUC">UUC</div>
+            <div class="codon" draggable="true" id="GGA">GGA</div>
+            <div class="codon" draggable="true" id="UAA">UAA</div>
+            <div class="codon" draggable="true" id="CCC">CCC</div>
+            <div class="codon" draggable="true" id="AAA">AAA</div>
+        </div>
+    </div>
+    
+    <script>
+        const codons = document.querySelectorAll('.codon');
+        const dropzones = document.querySelectorAll('.dropzone');
+        
+        codons.forEach(codon => {
+            codon.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData("text", event.target.id);
+            });
+        });
+        
+        dropzones.forEach(zone => {
+            zone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+            });
+            zone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                let data = event.dataTransfer.getData("text");
+                let draggedElement = document.getElementById(data);
+                
+                if (draggedElement.id === zone.dataset.codon) {
+                    zone.innerHTML = draggedElement.innerHTML;
+                    zone.style.background = "lightgreen";
+                } else {
+                    alert("Incorrect codon! Try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
